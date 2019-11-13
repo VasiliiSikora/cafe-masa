@@ -63,7 +63,11 @@ export default class GuestsTable extends Component {
                             <td>{guestRow.visitCount}</td>
                             <td>{guestRow.totalSpend}</td>
                             <td>{guestRow.allowMarketing}</td>
-                            <td>{guestRow.tags}</td>
+                            <td>{(guestRow.tags || []).map(tag => {
+                                return (
+                                    <ul>{tag}</ul>
+                                );
+                            })}</td>
                         </tr>;
                     })}
                 </tbody>
