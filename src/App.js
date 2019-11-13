@@ -5,19 +5,12 @@ import Footer from "./components/footer/Footer"
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
-import FilterMarketingButton from "./components/buttons/FilterMarketingButton";
-import SortTotalSpendButton from "./components/buttons/SortTotalSpendButton";
-import SortTotalCountButton from "./components/buttons/SortTotalCountButton";
-
 
 function App() {
   return (
     <div className="App">
       <Header/>
-      <FilterMarketingButton/>
-      <SortTotalSpendButton/>
-      <SortTotalCountButton/>
-      <GuestsTable />
+      <GuestsTable/>
       <Footer/>
     </div>
   );

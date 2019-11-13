@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Table } from "react-bootstrap";
+import { Table, Container, Button } from "react-bootstrap";
 import { Guest } from "../../objects/Guest";
 import 'bootstrap/dist/css/bootstrap.css';
+import './GuestsTable.css'
 
 import GuestDataJson from '../../content/Guests'
 
@@ -16,7 +17,11 @@ export default class GuestsTable extends Component {
             // The raw JSON data from the JSON Guests file.
             guestRawData: GuestDataJson,
             // An array of Guest objects converted from the JSON data for populating the table.
-            guestTableData: []
+            guestTableData: [],
+
+            filterMarketing: false,
+            sortTotalCount: false,
+            sortTotalSpend: false
         }
     }
 
@@ -30,14 +35,24 @@ export default class GuestsTable extends Component {
             const guest = guestData[i];
             this.state.guestTableData.push(
                 new Guest(guest.id, guest.first_name, guest.last_name, guest.email, guest.city,
-                          guest.visit_count, guest.total_spend, guest.allow_marketing.toString(), guest.tags));
+                    guest.visit_count, guest.total_spend, guest.allow_marketing.toString(), guest.tags));
         }
     }
 
     render() {
-        // Get the array of Guest objecst from the JSON before rendering.
+        // Get the array of Guest objects from the JSON before rendering.
         this._populateGuestsArray();
         return (
+            <Container fluid={true}>
+                <Button onClick={() => this.setState({filterMarketing: false})}>
+                    Filter by Allow Marketing
+                </Button>
+                <Button onClick={() => this.setState({sortTotalSpend: false})}>
+                    Sort by Total Spend
+                </Button>
+                <Button onClick={() => this.setState({sortTotalCount: false})}>
+                    Sort by Visit Count
+                </Button>
             <Table striped responsive bordered>
                 <thead>
                     <tr>
@@ -72,6 +87,7 @@ export default class GuestsTable extends Component {
                     })}
                 </tbody>
             </Table>
+            </Container>
         )
     }
 }
