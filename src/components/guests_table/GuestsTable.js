@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
 import { Table } from "react-bootstrap";
 import { Guest } from "../../objects/Guest";
+import 'bootstrap/dist/css/bootstrap.css';
 
 import GuestDataJson from '../../content/Guests'
 
