@@ -39,6 +39,32 @@ export default class GuestsTable extends Component {
         }
     }
 
+    _renderTableData() {
+        // todo: use filter, reduce and/or sort according to conditions and populate as needed
+        // todo: possibly update in component update
+        return (
+            <tbody>
+            {this.state.guestTableData.map((guestRow) => {
+                    return <tr key={guestRow.id}>
+                        <td>{guestRow.id}</td>
+                        <td>{guestRow.firstName}</td>
+                        <td>{guestRow.lastName}</td>
+                        <td>{guestRow.email}</td>
+                        <td>{guestRow.city}</td>
+                        <td>{guestRow.visitCount}</td>
+                        <td>{guestRow.totalSpend}</td>
+                        <td>{guestRow.allowMarketing}</td>
+                        <td>{(guestRow.tags || []).map(tag => {
+                            return (
+                                <ul>{tag}</ul>
+                            );
+                        })}</td>
+                    </tr>;
+                })}
+            </tbody>
+        )
+    }
+
     render() {
         // Get the array of Guest objects from the JSON before rendering.
         this._populateGuestsArray();
@@ -67,25 +93,7 @@ export default class GuestsTable extends Component {
                         <th>Tags</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {this.state.guestTableData.map((guestRow) => {
-                        return <tr key={guestRow.id}>
-                            <td>{guestRow.id}</td>
-                            <td>{guestRow.firstName}</td>
-                            <td>{guestRow.lastName}</td>
-                            <td>{guestRow.email}</td>
-                            <td>{guestRow.city}</td>
-                            <td>{guestRow.visitCount}</td>
-                            <td>{guestRow.totalSpend}</td>
-                            <td>{guestRow.allowMarketing}</td>
-                            <td>{(guestRow.tags || []).map(tag => {
-                                return (
-                                    <ul>{tag}</ul>
-                                );
-                            })}</td>
-                        </tr>;
-                    })}
-                </tbody>
+                    {this._renderTableData()}
             </Table>
             </Container>
         )
