@@ -43,24 +43,23 @@ export default class GuestsTable extends Component {
 
     _renderTableData() {
         // Declare a copy of the data read from the JSON, what is actually displayed according to sort/filtering flags.
-        let filteredData = this.state.guestTableData;
+        // This allows restoration of the original state after filtering so no data is lost.
+        let displayData = this.state.guestTableData;
 
         if(this.state.filterMarketing) {
-            filteredData =
-                this.state.guestTableData.filter(marketingGuests => marketingGuests.allowMarketing === "true");
+            displayData =
+                this.state.guestTableData.filter(guests => guests.allowMarketing === "true");
         }
         // Sort Total spend or visit count to show the highest at the top of the table.
         if(this.state.sortTotalCount) {
-            filteredData =
-                this.state.guestTableData.sort((a, b) => (a.visitCount < b.visitCount) ? 1 : -1);
+            displayData.sort((a, b) => (a.visitCount < b.visitCount) ? 1 : -1);
         } else if(this.state.sortTotalSpend) {
-            filteredData =
-                this.state.guestTableData.sort((a, b) => (a.totalSpend < b.totalSpend) ? 1 : -1);
+            displayData.sort((a, b) => (a.totalSpend < b.totalSpend) ? 1 : -1);
         }
 
         return (
             <tbody>
-            {filteredData.map((guestRow) => {
+            {displayData.map((guestRow) => {
                     return <tr key={guestRow.id}>
                         <td>{guestRow.id}</td>
                         <td>{guestRow.firstName}</td>
@@ -86,15 +85,15 @@ export default class GuestsTable extends Component {
             <Container fluid={true}>
                 <Button onClick={() => this.setState(prevState => ({
                     filterMarketing: !prevState.filterMarketing}))}>
-                    Filters Allow Marketing
+                    Filter Allow Marketing
                 </Button>
                 <Button onClick={() => this.setState(prevState => ({
                     sortTotalSpend: !prevState.sortTotalSpend}))}>
-                    Sort by Total Spend
+                    Toggle Sort by Total Spend
                 </Button>
                 <Button onClick={() =>  this.setState(prevState => ({
                     sortTotalCount: !prevState.sortTotalCount}))}>
-                    Sort by Visit Count
+                    Toggle Sort by Visit Count
                 </Button>
             <Table striped responsive bordered>
                 <thead>
