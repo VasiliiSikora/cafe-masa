@@ -18,11 +18,12 @@ export default class GuestsTable extends Component {
             guestRawData: GuestDataJson,
             // An array of Guest objects converted from the JSON data for populating the table.
             guestTableData: [],
-
             filterMarketing: false,
             sortTotalCount: false,
             sortTotalSpend: false
-        }
+        };
+        // Get the array of Guest objects from the JSON when the table is created.
+        this._populateGuestsArray();
     }
 
     /**
@@ -37,14 +38,29 @@ export default class GuestsTable extends Component {
                 new Guest(guest.id, guest.first_name, guest.last_name, guest.email, guest.city,
                     guest.visit_count, guest.total_spend, guest.allow_marketing.toString(), guest.tags));
         }
+        this.setState({filteredData: guestData});
     }
 
     _renderTableData() {
-        // todo: use filter, reduce and/or sort according to conditions and populate as needed
-        // todo: possibly update in component update
+        // Declare a copy of the data read from the JSON, what is actually displayed according to sort/filtering flags.
+        let filteredData = this.state.guestTableData;
+
+        if(this.state.filterMarketing) {
+            filteredData =
+                this.state.guestTableData.filter(marketingGuests => marketingGuests.allowMarketing === "true");
+        }
+        // Sort Total spend or visit count to show the highest at the top of the table.
+        if(this.state.sortTotalCount) {
+            filteredData =
+                this.state.guestTableData.sort((a, b) => (a.visitCount < b.visitCount) ? 1 : -1);
+        } else if(this.state.sortTotalSpend) {
+            filteredData =
+                this.state.guestTableData.sort((a, b) => (a.totalSpend < b.totalSpend) ? 1 : -1);
+        }
+
         return (
             <tbody>
-            {this.state.guestTableData.map((guestRow) => {
+            {filteredData.map((guestRow) => {
                     return <tr key={guestRow.id}>
                         <td>{guestRow.id}</td>
                         <td>{guestRow.firstName}</td>
@@ -66,17 +82,18 @@ export default class GuestsTable extends Component {
     }
 
     render() {
-        // Get the array of Guest objects from the JSON before rendering.
-        this._populateGuestsArray();
         return (
             <Container fluid={true}>
-                <Button onClick={() => this.setState({filterMarketing: false})}>
-                    Filter by Allow Marketing
+                <Button onClick={() => this.setState(prevState => ({
+                    filterMarketing: !prevState.filterMarketing}))}>
+                    Filters Allow Marketing
                 </Button>
-                <Button onClick={() => this.setState({sortTotalSpend: false})}>
+                <Button onClick={() => this.setState(prevState => ({
+                    sortTotalSpend: !prevState.sortTotalSpend}))}>
                     Sort by Total Spend
                 </Button>
-                <Button onClick={() => this.setState({sortTotalCount: false})}>
+                <Button onClick={() =>  this.setState(prevState => ({
+                    sortTotalCount: !prevState.sortTotalCount}))}>
                     Sort by Visit Count
                 </Button>
             <Table striped responsive bordered>
