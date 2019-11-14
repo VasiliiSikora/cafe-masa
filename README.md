@@ -3,7 +3,7 @@ This React application was created for the Cafe Masa challenge.
 
 The application creates a simple website tabular display of data contained in the 'content/Guests.js' file.
 
-Data can be filter on users with the tag "allowMarketing", and sorted on the Total Visits and Total Spend fields using
+Data can be filtered on users with the tag "Allow Marketing", and sorted on the 'Total Visits' and 'Total Spend' fields using
 simple button toggles. 
 ### Building
 To build the project, simply run:
