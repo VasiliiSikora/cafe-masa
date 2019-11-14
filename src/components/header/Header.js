@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 /**
  * A simple header displayed at the top of the site.
- * As we only have a single page with one table, this just displays one option as 'Home'.
+ * As we only have a single page with one table, this just displays the name of the site.
  */
 export default class Header extends Component {
     render() {

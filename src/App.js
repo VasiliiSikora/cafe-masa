@@ -7,6 +7,11 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import {Container} from "react-bootstrap";
 
+/**
+ * Definition of the application. As the application is only a single page, no react Routers or frameworks such as
+ * redux has been used.
+ * @returns {*} The rendered application.
+ */
 function App() {
   return (
     <div className="App">

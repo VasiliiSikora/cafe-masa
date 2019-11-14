@@ -8,6 +8,8 @@ import GuestDataJson from '../../content/Guests'
 
 /**
  * Renders the information in the Guests table from the JSON information.
+ * Also defines filtering and sorting functions.
+ * As much as possible, data has been ingested automatically using private functions.
  */
 export default class GuestsTable extends Component {
 
@@ -16,7 +18,7 @@ export default class GuestsTable extends Component {
         this.state = {
             // The raw JSON data from the JSON Guests file.
             guestRawData: GuestDataJson,
-            // An array of Guest objects converted from the JSON data for populating the table.
+            // An array of Guest objects converted from the JSON data for filtering/sorting.
             guestTableData: [],
             filterMarketing: false,
             sortTotalCount: false,
@@ -42,7 +44,8 @@ export default class GuestsTable extends Component {
 
     /**
      * Renders the table headings from the values in the JSON metadata section.
-     * This means that if the JSON data changes, the entire table will change as needed.
+     * This means that if the JSON data changes, the table will as well (however additional fields will have to be
+     * populated by adding them to the Guest.js object and rendering them in renderTableData).
      * This is based off the assumption that this metadata provides each field in the data 1 to 1.
      * @returns {*} The render of table headings as ingested from table headers.
      * @private
@@ -77,10 +80,9 @@ export default class GuestsTable extends Component {
         let displayData = this.state.guestTableData;
 
         if(this.state.filterMarketing) {
-            displayData =
-                this.state.guestTableData.filter(guests => guests.allowMarketing === "true");
+            displayData = this.state.guestTableData.filter(guests => guests.allowMarketing === "true");
         }
-        // Sort Total spend or visit count to show the highest at the top of the table.
+        // Sort Total spend or visit count to show the highest at the top of the table (descending).
         if(this.state.sortTotalCount) {
             displayData.sort((a, b) => (a.visitCount < b.visitCount) ? 1 : -1);
         } else if(this.state.sortTotalSpend) {
@@ -110,22 +112,33 @@ export default class GuestsTable extends Component {
         )
     }
 
+    // Render the table itself and filtering/sorting buttons.
     render() {
-        this._renderTableHeaders()
         return (
             <Container fluid={true} align={"left"}>
-                <Button onClick={() => this.setState(prevState => ({
-                    filterMarketing: !prevState.filterMarketing}))}>
-                    Filter Allow Marketing
-                </Button>
-                <Button onClick={() => this.setState(prevState => ({
-                    sortTotalSpend: !prevState.sortTotalSpend}))}>
-                    Toggle Sort by Total Spend
-                </Button>
-                <Button onClick={() =>  this.setState(prevState => ({
-                    sortTotalCount: !prevState.sortTotalCount}))}>
-                    Toggle Sort by Visit Count
-                </Button>
+                <div className={"button-filters"}>
+                    <b>Apply Filters:</b>
+                    <Button onClick={() => this.setState(prevState => ({
+                        filterMarketing: !prevState.filterMarketing}))}>
+                        Filter Marketing Guests
+                    </Button>
+                    <Button onClick={() => this.setState(prevState => ({
+                        sortTotalSpend: !prevState.sortTotalSpend}))}>
+                        Toggle Sort by Total Spend
+                    </Button>
+                    <Button onClick={() =>  this.setState(prevState => ({
+                        sortTotalCount: !prevState.sortTotalCount}))}>
+                        Toggle Sort by Visit Count
+                    </Button>
+                </div>
+                <div>
+                    <b>Applied Filters: </b>
+                    <p>
+                        Filter Marketing: <b>{this.state.filterMarketing.toString()}</b> <br/>
+                        Sort Total Spend: <b>{this.state.sortTotalSpend.toString()}</b><br/>
+                        Sort Visit Count: <b>{this.state.sortTotalCount.toString()}</b>
+                    </p>
+                </div>
             <Table striped responsive bordered>
                 {this._renderTableHeaders()}
                 {this._renderTableData()}
