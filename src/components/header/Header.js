@@ -11,7 +11,7 @@ export default class Header extends Component {
         return (
             <Nav defaultActiveKey="/home" as="ul">
                 <Nav.Item as="li">
-                    <Nav.Link href="#home">Home</Nav.Link>
+                    <Nav.Link href="#home">Cafe Masa Guests</Nav.Link>
                 </Nav.Item>
             </Nav>
         )

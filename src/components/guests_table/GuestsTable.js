@@ -38,9 +38,39 @@ export default class GuestsTable extends Component {
                 new Guest(guest.id, guest.first_name, guest.last_name, guest.email, guest.city,
                     guest.visit_count, guest.total_spend, guest.allow_marketing.toString(), guest.tags));
         }
-        this.setState({filteredData: guestData});
     }
 
+    /**
+     * Renders the table headings from the values in the JSON metadata section.
+     * This means that if the JSON data changes, the entire table will change as needed.
+     * This is based off the assumption that this metadata provides each field in the data 1 to 1.
+     * @returns {*} The render of table headings as ingested from table headers.
+     * @private
+     */
+    _renderTableHeaders() {
+        const guestDataHeaders = this.state.guestRawData["meta-data"].payload;
+        const guestTableHeaders = [];
+        for(let i = 0; i < guestDataHeaders.length; i++) {
+            const payloadField = guestDataHeaders[i];
+            guestTableHeaders.push(payloadField.label);
+        }
+
+        return (
+            <thead>
+            <tr>
+                {guestTableHeaders.map(label => {
+                    return <th key={label}>{label}</th>
+                })}
+            </tr>
+            </thead>
+        )
+    }
+
+    /**
+     * Renders all data in the table, according to the state flags set with toggle buttons.
+     * @returns {*} the rendered JSON data.
+     * @private
+     */
     _renderTableData() {
         // Declare a copy of the data read from the JSON, what is actually displayed according to sort/filtering flags.
         // This allows restoration of the original state after filtering so no data is lost.
@@ -81,8 +111,9 @@ export default class GuestsTable extends Component {
     }
 
     render() {
+        this._renderTableHeaders()
         return (
-            <Container fluid={true}>
+            <Container fluid={true} align={"left"}>
                 <Button onClick={() => this.setState(prevState => ({
                     filterMarketing: !prevState.filterMarketing}))}>
                     Filter Allow Marketing
@@ -96,20 +127,8 @@ export default class GuestsTable extends Component {
                     Toggle Sort by Visit Count
                 </Button>
             <Table striped responsive bordered>
-                <thead>
-                    <tr>
-                        <th>Guest ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>City</th>
-                        <th>Visits</th>
-                        <th>Total Spend</th>
-                        <th>Allow Marketing</th>
-                        <th>Tags</th>
-                    </tr>
-                </thead>
-                    {this._renderTableData()}
+                {this._renderTableHeaders()}
+                {this._renderTableData()}
             </Table>
             </Container>
         )

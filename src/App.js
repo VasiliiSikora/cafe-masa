@@ -5,12 +5,18 @@ import Footer from "./components/footer/Footer"
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import {Container} from "react-bootstrap";
 
 function App() {
   return (
     <div className="App">
       <Header/>
-      <GuestsTable/>
+        <Container fluid={true}>
+          <div className="intro-text" style={{textAlign: "left"}}>
+              <p>A simple tabular display of  guest data information pulled from a JSON file.</p>
+          </div>
+          <GuestsTable/>
+        </Container>
       <Footer/>
     </div>
   );
